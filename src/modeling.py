@@ -319,6 +319,8 @@ def build_final_recommendation_card(
         fallback = model_metrics_df.sort_values("pr_auc", ascending=False).iloc[0]
         final_model_name = str(fallback["model"])
 
+    # Final submission policy keeps Random Forest as primary model and Logistic as
+    # interpretability reference; fallback only triggers if selected model is absent.
     chosen_model = model_metrics_df[model_metrics_df["model"] == final_model_name].iloc[0]
 
     return pd.DataFrame(

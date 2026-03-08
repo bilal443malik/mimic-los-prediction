@@ -11,6 +11,8 @@
 -- Tuning knobs (in `params` CTE):
 --   - `top_n_by_los`: retain top-N longest stays
 --   - `min_percent_rank`: retain very high percentile stays (e.g., top 1%)
+-- Standalone usage:
+--   Execute directly in PostgreSQL for operational outlier review.
 
 WITH params AS (
     SELECT

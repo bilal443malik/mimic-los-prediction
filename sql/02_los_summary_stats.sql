@@ -6,6 +6,8 @@
 -- Output blocks:
 --   Query A: overall LOS stats + thresholds + prevalence
 --   Query B: subgroup long-stay rates by key operational dimensions
+-- Standalone usage:
+--   Execute file in PostgreSQL; returns two result sets in order.
 
 -- Query A: overall cohort metrics and long-stay candidate prevalence.
 WITH admissions_base AS (

@@ -1,14 +1,18 @@
 # Hospital LOS Case Summary
 
+## Executive Snapshot
+This project builds an admission-time long-stay risk workflow for hospital operations teams using MIMIC-style data.  
+Final policy: **`LOS > 7 days`**, **`random_forest`**, threshold **`0.40`**.
+
 ## Problem
 Hospitals need earlier visibility into likely long-stay admissions because a relatively small patient segment can drive disproportionate bed utilization and throughput pressure.
 
 ## Approach
-- Built a clean inpatient cohort from MIMIC-style `admissions` + `patients`.
+- Built a clean inpatient cohort from `admissions` + `patients`.
 - Calculated LOS from admission/discharge timestamps and filtered invalid stays.
 - Engineered admission-time-safe features and excluded leakage-prone fields.
 - Compared two long-stay definitions: `LOS > 7 days` and `LOS >= p90`.
-- Trained baseline models and selected a final model using both performance and explainability.
+- Trained baseline models and selected a final model using performance + explainability.
 - Tuned operating thresholds for workflow use.
 
 ## Final Definition and Model
@@ -20,7 +24,7 @@ Hospitals need earlier visibility into likely long-stay admissions because a rel
 ## Key Findings
 1. LOS is strongly right-skewed with a long-stay tail.
 2. Label choice materially changes prevalence and triage workload.
-3. Random Forest produced the strongest predictive discrimination on the current run.
+3. Random Forest produced the strongest predictive discrimination on this run.
 4. Threshold selection meaningfully changes precision/recall tradeoff.
 5. Admission-time features provide useful early operational signal.
 
@@ -28,8 +32,13 @@ Hospitals need earlier visibility into likely long-stay admissions because a rel
 1. Operationalize `LOS > 7 days` as the primary long-stay flag.
 2. Start with threshold `0.40` for balanced operations monitoring.
 3. Re-tune threshold regularly as case mix shifts.
-4. Add richer context features (service line/diagnosis) in next iteration.
+4. Add richer context features (service line/diagnosis) in the next iteration.
 5. Validate externally on larger cohorts before production deployment.
+
+## Business Impact
+- Enables earlier case-management prioritization for high-risk admissions.
+- Supports more consistent bed-flow planning with threshold-based triage.
+- Creates a reusable analytics package (SQL + model + dashboard + executive summary).
 
 ## Limitations
 - Current evidence is based on demo-scale data.

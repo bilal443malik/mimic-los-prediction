@@ -215,6 +215,7 @@ def prepare_inference_row(
 def risk_tier(probability: float, balanced_threshold: float, recall_priority_threshold: float) -> str:
     """Map risk probability to plain-English tier."""
 
+    # Tiering is anchored on tuned thresholds so interpretation stays policy-aligned.
     low_cut = min(recall_priority_threshold, balanced_threshold) * 0.6
     high_cut = max(recall_priority_threshold, balanced_threshold)
 
@@ -253,6 +254,7 @@ df = add_long_stay_flags(df)
 model_bundle, metrics_df, model_card_df, threshold_df = load_artifacts()
 
 st.subheader("LOS Distribution")
+st.caption("Distribution of observed length of stay in the selected dataset.")
 fig_dist = px.histogram(df, x="los_days", nbins=50, title="Length of Stay (days)")
 fig_dist.update_layout(bargap=0.05)
 st.plotly_chart(fig_dist, use_container_width=True)
@@ -285,6 +287,7 @@ fig_share = px.bar(
 st.plotly_chart(fig_share, use_container_width=True)
 
 st.subheader("Final Model Inference")
+st.caption("Use admission-time inputs only. Output is probability + plain-English risk tier.")
 if metrics_df is not None:
     st.caption("Latest model metrics")
     st.dataframe(metrics_df, use_container_width=True, hide_index=True)

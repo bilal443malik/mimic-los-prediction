@@ -10,6 +10,8 @@
 --      age_at_admit ~= anchor_age + (year(admittime) - anchor_year)
 --      This is de-identification-safe and useful for analytics, not exact birth-date age.
 --   4) Both long-stay labels are analyzed downstream; final modeling label is LOS > 7 days.
+-- Standalone usage:
+--   Run directly in PostgreSQL; this query does not depend on temp tables.
 
 WITH admissions_base AS (
     SELECT
