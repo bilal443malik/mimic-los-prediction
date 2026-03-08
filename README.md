@@ -71,34 +71,28 @@ hospital-los-case-study/
 - Final decision card: `outputs/tables/final_model_card.csv`
 - Feature importance tables: `outputs/tables/feature_importance_*.csv`
 
-## Suggested Screenshots (Add Before Publishing)
-Save screenshots under `assets/screenshots/` and update links/captions below.
+## Screenshots
+Screenshots are stored in `assets/screenshots/`.
 
-1. **Notebook - LOS Distribution**
-`assets/screenshots/01_notebook_los_distribution.png`  
-Capture from: `notebooks/los_case_study.ipynb`, section **6) LOS Distribution and Summary** (histogram plot).
+### 1) Notebook - LOS Distribution
+![Notebook LOS Distribution](assets/screenshots/01_notebook_los_distribution.png)
+Figure 1. LOS distribution is right-skewed with a long-stay tail, motivating targeted long-stay risk prediction.
 
-2. **Notebook - Label/Model Final Decision**
-`assets/screenshots/02_notebook_final_decision.png`  
-Capture from: notebook section **13) Final Label and Model Decision Support** (label prevalence + final model card output).
+### 2) Notebook - Final Label and Model Decision
+![Notebook Final Decision](assets/screenshots/02_notebook_final_decision.png)
+Figure 2. Final policy selection: label `LOS > 7 days`, model `random_forest`.
 
-3. **Notebook - Threshold Policy**
-`assets/screenshots/03_notebook_threshold_tradeoff.png`  
-Capture from: notebook section **14) Threshold Policy** (tradeoff chart + selected thresholds table).
+### 3) Notebook - Threshold Policy
+![Notebook Threshold Tradeoff](assets/screenshots/03_notebook_threshold_tradeoff.png)
+Figure 3. Threshold tuning output used to set the balanced operating threshold at `0.40`.
 
-4. **Notebook - Feature Importance**
-`assets/screenshots/04_notebook_feature_importance.png`  
-Capture from: notebook section **15) Feature Importance and Probability Interpretation** (RF or logistic importance chart).
+### 4) Notebook - Feature Importance
+![Notebook Feature Importance](assets/screenshots/04_notebook_feature_importance.png)
+Figure 4. Feature-importance view supporting model interpretation for stakeholder communication.
 
-5. **Dashboard - LOS and Risk Prediction**
-`assets/screenshots/05_dashboard_main.png`  
-Capture from: `streamlit run dashboard/app.py` with:
-- LOS distribution visible
-- long-stay share-by-dimension chart visible
-- risk prediction panel populated
-
-Suggested caption format:
-`Figure X. <what is shown> and why it matters operationally.`
+### 5) Dashboard - LOS + Risk Prediction
+![Dashboard Main View](assets/screenshots/05_dashboard_main.png)
+Figure 5. One-page dashboard showing LOS distribution, long-stay share by dimension, and patient-level risk prediction.
 
 ## How to Run
 1. Setup environment
