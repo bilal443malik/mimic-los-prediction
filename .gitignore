@@ -33,3 +33,8 @@ outputs/models/*
 Thumbs.db
 .vscode/
 .idea/
+
+# Video Transcript help me in video creation
+README_video_transcript.md
+CLIENT_EDA_RESPONSE.md
+client_eda_review_package_formatted.docx

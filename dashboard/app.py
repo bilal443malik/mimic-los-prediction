@@ -26,42 +26,19 @@ from src.utils import load_joblib_artifact
 st.set_page_config(page_title="Hospital LOS Dashboard", layout="wide")
 
 
-def make_demo_data(n: int = 2000, seed: int = 42) -> pd.DataFrame:
-    """Create synthetic data for UI development when real cohort data is unavailable."""
+def load_cohort_data() -> tuple[pd.DataFrame, Path]:
+    """Load the project cohort file used as the dashboard's default real dataset."""
 
-    rng = np.random.default_rng(seed)
-    age = rng.integers(18, 90, size=n)
-    admission_type = rng.choice(["ELECTIVE", "URGENT", "EMERGENCY"], size=n, p=[0.25, 0.25, 0.50])
-    insurance = rng.choice(["Medicare", "Medicaid", "Private", "Self Pay"], size=n, p=[0.45, 0.20, 0.30, 0.05])
-    weekend_admit = rng.choice([0, 1], size=n, p=[0.75, 0.25])
+    cohort_path = PROJECT_ROOT / "data" / "interim" / "cohort_base.csv"
+    if not cohort_path.exists():
+        st.error(
+            "Missing cohort file: `data/interim/cohort_base.csv`. "
+            "Run the notebook through the final packaging steps to generate it."
+        )
+        st.stop()
 
-    base = rng.gamma(shape=2.2, scale=2.0, size=n)
-    los_days = (
-        base
-        + (age > 70) * 1.1
-        + (admission_type == "EMERGENCY") * 1.6
-        + weekend_admit * 0.4
-        + rng.normal(0, 0.6, size=n)
-    )
-    los_days = np.clip(los_days, 0.2, None)
-
-    return pd.DataFrame(
-        {
-            "age_at_admit": age,
-            "gender": rng.choice(["M", "F"], size=n),
-            "admission_type": admission_type,
-            "admission_location": rng.choice(["EMERGENCY ROOM", "TRANSFER", "PHYS REFERRAL"], size=n),
-            "insurance": insurance,
-            "language": rng.choice(["ENGLISH", "SPANISH", "UNKNOWN"], size=n),
-            "marital_status": rng.choice(["MARRIED", "SINGLE", "DIVORCED", "Unknown"], size=n),
-            "race": rng.choice(["WHITE", "BLACK", "ASIAN", "HISPANIC", "Unknown"], size=n),
-            "admit_hour": rng.integers(0, 24, size=n),
-            "admit_dayofweek": rng.integers(0, 7, size=n),
-            "admit_month": rng.integers(1, 13, size=n),
-            "is_weekend_admit": weekend_admit,
-            "los_days": los_days,
-        }
-    )
+    cohort_df = pd.read_csv(cohort_path)
+    return cohort_df, cohort_path
 
 
 def add_long_stay_flags(df: pd.DataFrame) -> pd.DataFrame:
@@ -233,18 +210,8 @@ st.caption(
     f"Final submission policy: label `{final_label_text}` ({FINAL_LABEL_MODE}), "
     f"model `{FINAL_MODEL_NAME}`, balanced threshold `{FINAL_BALANCED_THRESHOLD:.2f}`."
 )
-
-with st.sidebar:
-    st.header("Data")
-    uploaded = st.file_uploader("Upload cohort CSV", type=["csv"])
-    use_demo = st.toggle("Use demo data", value=uploaded is None)
-
-if uploaded is not None and not use_demo:
-    df = pd.read_csv(uploaded)
-    st.success("Loaded uploaded data.")
-else:
-    df = make_demo_data()
-    st.info("Using synthetic demo data. Upload cohort CSV for real analysis.")
+df, cohort_source_path = load_cohort_data()
+st.success(f"Loaded cohort data from `{cohort_source_path.relative_to(PROJECT_ROOT)}`.")
 
 if "los_days" not in df.columns:
     st.error("Dataset must include `los_days`.")
